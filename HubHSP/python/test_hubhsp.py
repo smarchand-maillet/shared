@@ -22,7 +22,7 @@ if __name__ == '__main__':
     D = 2
     k = 50      # parameter  for the kNN
 
-    # data = np.genfromtxt('dataFileName',delimiter=',',skip_header=0) # when reading CSV
+    # data = np.genfromtxt('/my_data/real/flow_cytometry_470955-2D-u.csv',delimiter=',',skip_header=0) # when reading from CSV file
     # data = np.random.randn(N,D) # generate random gaussian data
     data = np.random.rand(N,D) # generate random uniform data
 
