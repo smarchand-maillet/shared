@@ -8,7 +8,7 @@ Directory 'real': data collected from real-life events
 ------------------------------------------------------
   * flow_cytometry_470955-2D-u.csv.gz : data from Flow Cytometry analysis (FC): 
      - 470955 events, 2 first markers are retained
-	 - N = 470955, D = 2
+	 - N = 470955, D = 2, size = 5.8Mb (unzipped = 17Mb)
 	 - GZIP CSV (comma delimiter) with 2 columns, no header
 	 - first line: 546.9999999013615, 463.00000000657616
 	 - Uniform noise [-1E-6,+1E-6] is added since original FC data is quantized and we want to avoid duplicate data
@@ -16,7 +16,7 @@ Directory 'real': data collected from real-life events
 	 
   * flow_cytometry_470955-18D-u.csv.gz : data from Flow Cytometry analysis(FC): 
      - 470955 events, 18 markers
-	 - N = 470955, D = 18
+	 - N = 470955, D = 18, size = 56Mb (unzipped = 159Mb)
 	 - GZIP CSV (comma delimiter) with 2 columns, no header
 	 - first line: 546.9999999792157, 463.0000000215865, 306.00000006908505, 342.9999999971358, 189.00000003891353, 175.0000000901529, 508.9999999213645, 286.0000000795968, 69.00000005227929, 137.00000002427726, 194.99999998570468, 478.9999999771847, -1.4363534656432119e-08, 108.00000004750147, 863.0000000642676, 244.00000000010542, 933.9999999230232, 3.9518381105096377e-08
 	 - Uniform noise [-1E-6,+1E-6] is added since original FC data is quantized and we want to avoid duplicate data
