@@ -26,7 +26,8 @@ if __name__ == '__main__':
     # data = np.random.randn(N,D) # generate random gaussian data
     data = np.random.rand(N,D) # generate random uniform data
 
-    print(f"data: {data.shape[0]} x {data.shape[1]}D")
+    (N,D) = data.shape 
+    print(f"data: {N} x {D}D - K: {k}")
 
     knn,kWeight = hhsp.compute_knn(data,k)  # computes the kNN igraph structure
 
