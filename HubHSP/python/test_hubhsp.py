@@ -12,7 +12,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import hidim.hubhsp as hhsp
+import hubhsp.hubhsp as hhsp
 
 #-------------------------------------------------------------------------------- 
 if __name__ == '__main__':
@@ -22,6 +22,7 @@ if __name__ == '__main__':
     D = 2
     k = 50      # parameter  for the kNN
 
+    # data = np.genfromtxt('dataFileName',delimiter=',',skip_header=0) # when reading CSV
     # data = np.random.randn(N,D) # generate random gaussian data
     data = np.random.rand(N,D) # generate random uniform data
 
