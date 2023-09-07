@@ -22,11 +22,12 @@ if __name__ == '__main__':
     D = 2
     k = 50      # parameter  for the kNN
 
-    # data = np.genfromtxt('dataFileName',delimiter=',',skip_header=0) # when reading CSV
-    # data = np.random.randn(N,D) # generate random gaussian data
-    data = np.random.rand(N,D) # generate random uniform data
+    # data = np.genfromtxt('/work_directory/my_data_file.csv',delimiter=',',skip_header=0) # when reading CSV
+    data = np.random.randn(N,D) # generate random gaussian data
+    # data = np.random.rand(N,D) # generate random uniform data
 
-    print(f"data: {data.shape[0]} x {data.shape[1]}D")
+    (N,D) = data.shape 
+    print(f"data: {N} x {D}D - K: {k}")
 
     knn,kWeight = hhsp.compute_knn(data,k)  # computes the kNN igraph structure
 
