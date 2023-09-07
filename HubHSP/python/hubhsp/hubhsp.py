@@ -123,7 +123,8 @@ def compute_hubhsp(lData,lKnn,lEWeight,lStart):
 
         rho = np.min(lEWeight[eid]) # distance to closest neighbor
 
-        discard = np.zeros(nNeighb, dtype=bool) # discarded data
+        discard = np.zeros(nNeighb, dtype=bool) # discarded data (none at initialization)
+        
         while discard.sum() < nNeighb:     # while not all neighbors have been discarded
             sH = lH[neighb]                # current hubness of neighbors
             idx = np.argsort(sH)           
