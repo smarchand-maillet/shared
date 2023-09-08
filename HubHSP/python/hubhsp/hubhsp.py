@@ -14,6 +14,12 @@ import numpy as np
 import igraph as ig  # we use igraph as base structure for the graph
 
 #⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻
+# 'step' in the comments refer to the description of the algorithm in the article:
+# HubHSP graph: capturing local geometrical and statistical data properties via spanning graphs
+# Stephane Marchand-Maillet and Edgar Chávez
+# <Information Systems reference if accepted for publication>
+#
+#⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻
 # Construction queue: a set of marked neighbors
 # the set ensures randomness in the progression
 # could be a stack to mimic a DFS-like progression
@@ -93,7 +99,7 @@ def compute_knn(lData,lK):
 def compute_hubhsp(lData,lKnn,lEWeight,lStart):
     print(f"Building HubHSP graph from kNN graph...")
 
-    # initialize local parameters
+    # initialize local parameters 
     lN = lData.shape[0]
     lHHSP = ig.Graph(lN,directed=True)    # HubHSP is a directed graph
     lHWeight = []
