@@ -11,7 +11,7 @@
 #⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻
 
 import numpy as np
-import igraph as ig
+import igraph as ig  # we use igraph as base structure for the graph
 
 #⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻
 # Construction queue: a set of marked neighbors
@@ -19,11 +19,11 @@ import igraph as ig
 # could be a stack to mimic a DFS-like progression
 # could be a DEQueue to mimic a BFS-like progression
 
-def push(lQ,i):  # insert data[i] into q
+def push(lQ,i):  # insert data[i] into q                         [steps 3 and 6]
     lQ[i] = True
     return lQ
 
-def pop(lQ): # gets the first data from q
+def pop(lQ): # gets the first data from q                        [step 5]
     n = len(lQ)
     i = 0
     while (i<n) and (not(lQ[i])):
@@ -35,7 +35,7 @@ def pop(lQ): # gets the first data from q
 #⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻
 # (squared) Euclidean distance: only sorting is used throughout
 
-def distance(x,y):
+def distance(x,y):                               
     return ((x-y)**2).sum()
 
 #⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻
@@ -48,10 +48,9 @@ def getEid(lG, start, ends):
     return lG.get_eids(ans)
 
 #⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻
-# Basic procedure toi construct kNN graph as a igraph structure
+# Basic procedure to construct kNN graph as a igraph structure
 # !!! may be slow !!!!
-# could be replaced by faster algorithm
-# or precomputed 
+# could be replaced by faster algorithm or precomputed 
 
 def compute_knn(lData,lK):
     print(f"Building {lK}NN graph...")
@@ -87,11 +86,14 @@ def compute_knn(lData,lK):
 # Main procedure: HubHSP construction
 #   lData: NxD np.array of data
 #   lKnn: the kNN igraph structure
-#   lEWeight: the kNN edge weights (distance values)
+#         used here as a proximity index eg for steps 7 and 13
+#   lEWeight: the corresponding kNN edge weights (distance values)
 #   lStart: index of the the start vertex
 
 def compute_hubhsp(lData,lKnn,lEWeight,lStart):
     print(f"Building HubHSP graph from kNN graph...")
+
+    # initialize local parameters
     lN = lData.shape[0]
     lHHSP = ig.Graph(lN,directed=True)    # HubHSP is a directed graph
     lHWeight = []
@@ -99,48 +101,50 @@ def compute_hubhsp(lData,lKnn,lEWeight,lStart):
     lH = np.zeros(lN)                     # to store the hubness values
     Q = np.zeros(lN, dtype=bool)          # construction queue
 
+    # initialize the procedure
     push(Q,lStart)                        # start from the start vertex
 
     mark = np.zeros(lN, dtype=bool)       # mark the node so as to explore them once only
-    
+
+    # Main iterative construction procedure
     while Q.sum() > 0 and mark.sum()<lN:
-        Q,i = pop(Q)
+        Q,i = pop(Q)                         # step 5
         while i<lN and mark[i]:
             Q,i = pop(Q)
         
-        if i==lN:   # Q was empty: disconnected kNN graph
+        if i==lN:   # Q was empty => disconnected kNN graph (DFS-like procedure)
             i = 0
-            while mark[i]: # re-start from the first unmarked vertex
+            while mark[i]: # => re-start from the first unmarked vertex
                 i += 1
             print(f"**** Restarting from {i}")
             
         print(f"Currently at {i}",end='')
         
         neighb = lKnn.neighbors(i,mode='out')  # forward neighbors of i
-        nNeighb = len(neighb)                  # their number (should be k)
+        nNeighb = len(neighb)                  # their number (should be k, implicit here)
         eid = getEid(lKnn,i,neighb)            # the edges between i and its neighbors
-        push(Q,neighb)                         # these are next candidates for the construction
+        push(Q,neighb)                         # step 6: these are next candidates for the construction
 
-        rho = np.min(lEWeight[eid]) # distance to closest neighbor
+        rho = np.min(lEWeight[eid]) # step 7: distance to closest neighbor
 
         discard = np.zeros(nNeighb, dtype=bool) # discarded data (none at initialization)
         
-        while discard.sum() < nNeighb:     # while not all neighbors have been discarded
-            sH = lH[neighb]                # current hubness of neighbors
+        while discard.sum() < nNeighb:     # step 8: while not all neighbors have been discarded
+            sH = lH[neighb]                # step 9: current hubness of neighbors
             idx = np.argsort(sH)           
-            idx = idx[::-1]                # sorting indices (decreasing order)
+            idx = idx[::-1]                # step 9: sorting indices (decreasing order)
             idxJ = 0
-            while idxJ < nNeighb and discard[idx[idxJ]]: # find strongest non-discarded hub
+            while idxJ < nNeighb and discard[idx[idxJ]]: # step 9: find strongest non-discarded hub
                 idxJ += 1
-            j = neighb[idx[idxJ]]                        # j is its index
+            j = neighb[idx[idxJ]]                        # step 9: j is its index
             distJ = lEWeight[eid[idx[idxJ]]]             # precomputed distance i -> j
-            lHHSP.add_edge(i,j)                          # and becomes a HubHSP neighbor
-            lHWeight.append(distJ)                       # keep the edge weight (distance)
-            lH[j] += 1                                   # and its hubness increases
+            lHHSP.add_edge(i,j)                          # step 10: and becomes a HubHSP neighbor
+            lHWeight.append(distJ)                       # step 10: keep the edge weight (distance)
+            lH[j] += 1                                   # step 11: and its hubness increases
             discard[idx[idxJ]]= True                     # and gets discarded as a neighbor
             
-            xJtilde = lData[i] + rho*(lData[j]-lData[i])/distJ  # projection over C_i
-            for l in range(nNeighb):                         # HSP rule to disard neighbors if any
+            xJtilde = lData[i] + rho*(lData[j]-lData[i])/distJ  # step 12: projection over C_i
+            for l in range(nNeighb):                         # step 13: HSP rule to disard neighbors if any
                 if not(discard[l]):
                     if lEWeight[eid[l]] > distance(xJtilde,lData[neighb[l]]):
                         discard[l] = True
