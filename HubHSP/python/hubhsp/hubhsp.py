@@ -150,7 +150,7 @@ def compute_hubhsp(lData,lKnn,lEWeight,lStart):
             discard[idx[idxJ]]= True                     # and gets discarded as a neighbor
             
             xJtilde = lData[i] + rho*(lData[j]-lData[i])/distJ  # step 12: projection over C_i
-            for l in range(nNeighb):                         # step 13: HSP rule to disard neighbors if any
+            for l in range(nNeighb):                  # step 13: HSP rule to disard neighbors if any
                 if not(discard[l]):
                     if lEWeight[eid[l]] > distance(xJtilde,lData[neighb[l]]):
                         discard[l] = True
