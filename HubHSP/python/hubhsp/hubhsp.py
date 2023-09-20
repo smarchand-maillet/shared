@@ -25,7 +25,7 @@ import igraph as ig  # we use igraph as base structure for the graph
 # could be a stack to mimic a DFS-like progression
 # could be a DEQueue to mimic a BFS-like progression
 
-def push(lQ,i):  # insert data[i] into q                         [steps 3 and 6]
+def push(lQ,i):  # insert data[i] into q                         [steps 3 and 7]
     lQ[i] = True
     return lQ
 
@@ -92,7 +92,7 @@ def compute_knn(lData,lK):
 # Main procedure: HubHSP construction
 #   lData: NxD np.array of data
 #   lKnn: the kNN igraph structure
-#         used here as a proximity index eg for steps 7 and 13
+#         used here as a proximity index eg for steps 10 and 11
 #   lEWeight: the corresponding kNN edge weights (distance values)
 #   lStart: index of the the start vertex
 
@@ -129,28 +129,28 @@ def compute_hubhsp(lData,lKnn,lEWeight,lStart):
         neighb = lKnn.neighbors(i,mode='out')  # forward neighbors of i
         nNeighb = len(neighb)                  # their number (should be k, implicit here)
         eid = getEid(lKnn,i,neighb)            # the edges between i and its neighbors
-        push(Q,neighb)                         # step 6: these are next candidates for the construction
+        push(Q,neighb)                         # step 7: these are next candidates for the construction
 
         rho = np.min(lEWeight[eid]) # step 7: distance to closest neighbor
 
         discard = np.zeros(nNeighb, dtype=bool) # discarded data (none at initialization)
         
-        while discard.sum() < nNeighb:     # step 8: while not all neighbors have been discarded
-            sH = lH[neighb]                # step 9: current hubness of neighbors
+        while discard.sum() < nNeighb:     # step 9: while not all neighbors have been discarded
+            sH = lH[neighb]                # step 10: current hubness of neighbors
             idx = np.argsort(sH)           
-            idx = idx[::-1]                # step 9: sorting indices (decreasing order)
+            idx = idx[::-1]                # step 10: sorting indices (decreasing order)
             idxJ = 0
-            while idxJ < nNeighb and discard[idx[idxJ]]: # step 9: find strongest non-discarded hub
+            while idxJ < nNeighb and discard[idx[idxJ]]: # step 10: find strongest non-discarded hub
                 idxJ += 1
             j = neighb[idx[idxJ]]                        # step 9: j is its index
             distJ = lEWeight[eid[idx[idxJ]]]             # precomputed distance i -> j
-            lHHSP.add_edge(i,j)                          # step 10: and becomes a HubHSP neighbor
-            lHWeight.append(distJ)                       # step 10: keep the edge weight (distance)
-            lH[j] += 1                                   # step 11: and its hubness increases
+            lHHSP.add_edge(i,j)                          # step 11: and becomes a HubHSP neighbor
+            lHWeight.append(distJ)                       # step 11: keep the edge weight (distance)
+            lH[j] += 1                                   # step 12: and its hubness increases
             discard[idx[idxJ]]= True                     # and gets discarded as a neighbor
             
-            xJtilde = lData[i] + rho*(lData[j]-lData[i])/distJ  # step 12: projection over C_i
-            for l in range(nNeighb):                  # step 13: HSP rule to disard neighbors if any
+            xJtilde = lData[i] + rho*(lData[j]-lData[i])/distJ  # step 13: projection over C_i (Eq 1)
+            for l in range(nNeighb):                  # step 14-15: HSP rule to disard neighbors if any
                 if not(discard[l]):
                     if lEWeight[eid[l]] > distance(xJtilde,lData[neighb[l]]):
                         discard[l] = True
